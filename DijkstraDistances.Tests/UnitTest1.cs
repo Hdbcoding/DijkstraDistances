@@ -1,18 +1,26 @@
+using System.IO;
+using System.Linq;
+using DijkstraDistances.Graphs;
 using NUnit.Framework;
 
-namespace Tests
+namespace DijkstraDistances.Tests
 {
     public class Tests
     {
-        [SetUp]
-        public void Setup()
+        [Test, TestCaseSource(typeof(TestCaseFactory), "TestCases")]
+        public void CanLoadGraphs(string inputFile, string outputFile)
         {
-        }
+            var graph = GraphParser.ParseGraph(inputFile);
+            //assert that each line produced a node
+            var count = File.ReadAllLines(inputFile).Count();
+            Assert.AreEqual(graph.Count, count);
 
-        [Test]
-        public void Test1()
-        {
-            Assert.Pass();
+            //Assert that all edges are reflected
+            foreach (var node in graph.Values){
+                foreach (var edge in node.Edges){
+                    Assert.AreEqual(edge.Value, graph[edge.Key].Edges[node.Id]);
+                }
+            }
         }
     }
 }
