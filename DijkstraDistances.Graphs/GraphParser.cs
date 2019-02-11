@@ -15,7 +15,7 @@ namespace DijkstraDistances.Graphs
         //the parsing logic will not handle this case:
         //  1 2,5
         //  2       <-- back-edge missing from data
-        public static Dictionary<int, Node> ParseGraph(string inputFile)
+        public static Dictionary<int, Node> Parse(string inputFile)
         {
             var graph = new Dictionary<int, Node>();
             foreach (string line in File.ReadLines(inputFile))
@@ -25,7 +25,7 @@ namespace DijkstraDistances.Graphs
                     .ToList();
                 int id = int.Parse(values[0]);
                 values.RemoveAt(0);
-                var edges = new Dictionary<int,int>();
+                var edges = new Dictionary<int,Edge>();
                 var edgePairs = values.Select(n => n
                         .Split(',')
                         .Where(m => !string.IsNullOrWhiteSpace(m))
@@ -33,8 +33,8 @@ namespace DijkstraDistances.Graphs
                 foreach (var pair in edgePairs){
                     var edgeId = pair.First();
                     var length = pair.Last();
-                    if (edges.ContainsKey(edgeId)) edges[edgeId] = Math.Min(edges[edgeId], length);
-                    else edges.Add(edgeId, length);
+                    if (edges.ContainsKey(edgeId)) length = Math.Min(edges[edgeId].Length, length);
+                    edges[edgeId] = new Edge(id, edgeId, length);
                 }
                 var node = new Node(id, edges);
                 graph.Add(id, node);

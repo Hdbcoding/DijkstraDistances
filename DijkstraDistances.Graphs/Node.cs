@@ -7,9 +7,9 @@ namespace DijkstraDistances.Graphs
         public int Id { get; set; }
         //key is id of other node
         //value is distance to other node
-        public Dictionary<int, int> Edges { get; set; }
+        public Dictionary<int, Edge> Edges { get; set; }
 
-        public Node(int id, Dictionary<int,int> edges)
+        public Node(int id, Dictionary<int, Edge> edges)
         {
             Id = id;
             Edges = edges;
